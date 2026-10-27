@@ -1,0 +1,74 @@
+:root {
+    --primary: #25D366;
+    --primary-hover: #1eb855;
+    --bg-color: #0f172a;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-main: #ffffff;
+    --text-sub: #94a3b8;
+    --err: #ef4444;
+    --ok: #10b981;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, system-ui, sans-serif; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Disco Lights */
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); z-index: 0; opacity: 0.6; animation: float 12s infinite ease-in-out alternate; }
+.orb-1 { width: 300px; height: 300px; background: #25D366; top: -10%; left: -10%; }
+.orb-2 { width: 400px; height: 400px; background: #3b82f6; bottom: -20%; right: -10%; animation-delay: -4s; }
+.orb-3 { width: 250px; height: 250px; background: #a855f7; top: 40%; left: 60%; animation-delay: -8s; }
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -60px) scale(1.1); }
+    100% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+/* Glass Panel */
+.panel {
+    position: relative; z-index: 1; width: 100%; max-width: 420px; margin: 20px; padding: 40px 32px;
+    background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px;
+    backdrop-filter: blur(16px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); text-align: center;
+}
+
+h1 { font-size: 24px; margin-bottom: 8px; }
+p.sub { color: var(--text-sub); font-size: 14px; margin-bottom: 30px; }
+.input-group { text-align: left; margin-bottom: 20px; }
+.input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 8px; text-transform: uppercase; }
+
+input {
+    width: 100%; padding: 16px; font-size: 16px; color: var(--text-main);
+    background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; outline: none;
+}
+input:focus { border-color: var(--primary); background: rgba(0, 0, 0, 0.4); }
+
+button {
+    width: 100%; padding: 16px; margin-top: 10px; font-size: 16px; font-weight: 700;
+    color: #000; background: var(--primary); border: none; border-radius: 12px; cursor: pointer;
+}
+button:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+button:disabled { background: #555; color: #999; cursor: not-allowed; }
+
+/* Code Display */
+.code-display {
+    font-size: 32px; letter-spacing: 8px; font-weight: 700; padding: 20px;
+    background: rgba(0, 0, 0, 0.5); border: 2px dashed var(--primary); border-radius: 12px;
+    margin: 20px 0; color: var(--primary); font-family: monospace;
+}
+
+.msg { padding: 12px; border-radius: 8px; font-size: 14px; margin-top: 15px; }
+.msg.err { background: rgba(239, 68, 68, 0.15); color: var(--err); }
+.msg.ok  { background: rgba(16, 185, 129, 0.15); color: var(--ok); }
+.status-text { font-size: 13px; color: var(--text-sub); margin-top: 15px; min-height: 20px; }
+.hint { font-size: 12px; color: var(--text-sub); margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
