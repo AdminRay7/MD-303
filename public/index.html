@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WhatsApp Pairing Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Disco Lights -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Glass Panel -->
+    <div class="panel">
+        <h1>WhatsApp Linker</h1>
+        <p class="sub">Enter your number to generate a secure pairing code.</p>
+
+        <div class="input-group">
+            <label for="phone">Phone Number</label>
+            <input id="phone" placeholder="e.g. 254712345678" inputmode="numeric" autocomplete="off">
+        </div>
+
+        <button id="btn">Get Pairing Code</button>
+
+        <div id="out"></div>
+        <div class="status-text" id="status"></div>
+
+        <div class="hint">
+            After getting the code:<br>
+            <strong>WhatsApp → Linked Devices → Link with phone number</strong>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
