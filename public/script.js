@@ -1,15 +1,12 @@
 const $ = id => document.getElementById(id);
 const out = $("out"), status = $("status"), btn = $("btn"), phoneInput = $("phone");
 let pollTimer = null;
-
-// Generate a strictly formatted session ID (alphanumeric only)
-const sessionId = "sess" + Math.random().toString(36).slice(2, 8);
+const sessionId = "sess-" + Math.random().toString(36).slice(2, 8);
 
 function setStatus(msg, color) {
     status.textContent = msg || "";
     status.style.color = color || "var(--text-sub)";
 }
-
 function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
 
 function startPoll() {
@@ -25,14 +22,19 @@ function startPoll() {
                 setStatus("Paired successfully.", "var(--ok)");
                 btn.disabled = false;
                 btn.textContent = "Link Another Device";
+                phoneInput.value = "";
             } else if (j.exists) {
                 setStatus("Waiting for you to enter the code on WhatsApp…", "var(--primary)");
             } else {
-                stopPoll();
-                setStatus("Session dropped or logged out.", "var(--err)");
-                out.innerHTML = `<div class="msg err">Session closed. Try again.</div>`;
-                btn.disabled = false;
-                btn.textContent = "Get Pairing Code";
+                // FIX: Do NOT clear the screen if we already showed the code.
+                // Just stop polling silently.
+                if (!out.innerHTML.includes('code-display')) {
+                    stopPoll();
+                    setStatus("Session dropped.", "var(--err)");
+                    out.innerHTML = `<div class="msg err">Session closed. Please try again.</div>`;
+                    btn.disabled = false;
+                    btn.textContent = "Get Pairing Code";
+                }
             }
         } catch {
             stopPoll();
@@ -48,7 +50,7 @@ btn.onclick = async () => {
     stopPoll();
 
     if (num.length < 10 || num.length > 15) {
-        out.innerHTML = '<div class="msg err">Phone number must be 10-15 digits.</div>';
+        out.innerHTML = '<div class="msg err">Phone number must be 10-15 digits (include country code).</div>';
         return;
     }
 
@@ -62,13 +64,9 @@ btn.onclick = async () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ sessionId, num })
         });
-        
         const j = await r.json();
         
-        // THIS IS THE FIX: If there is no code, show the exact error
-        if (!r.ok || !j.code) {
-            throw new Error(j.error || "Server returned an invalid response. Check Render logs.");
-        }
+        if (!r.ok || !j.code) throw new Error(j.error || "Server returned an invalid response.");
         
         out.innerHTML = `<div class="code-display">${j.code}</div>`;
         setStatus("Enter this code in WhatsApp → Linked Devices.", "var(--primary)");
@@ -76,14 +74,9 @@ btn.onclick = async () => {
         
         startPoll();
     } catch (e) {
-        // Display the exact error instead of "undefined"
         out.innerHTML = `<div class="msg err">❌ ${e.message}</div>`;
         setStatus("");
         btn.disabled = false;
         btn.textContent = "Get Pairing Code";
     }
 };
-
-phoneInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter" && !btn.disabled) btn.click();
-});
