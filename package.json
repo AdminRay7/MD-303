@@ -1,9 +1,13 @@
 {
-  "name": "web-panel-api",
+  "name": "web-panel",
   "version": "1.0.0",
+  "description": "API Gateway and Web Frontend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
+  },
+  "engines": {
+    "node": "22.x"
   },
   "dependencies": {
     "axios": "^1.7.9",
