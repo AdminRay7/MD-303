@@ -8,8 +8,7 @@ const app = express();
 // ============================================
 //   Port Configuration
 // ============================================
-// Use the port from the environment (Render/VPS), or 8080 if nothing is set.
-// This avoids the "address already in use" error if 3000 is taken.
+// Use the port from the environment (Heroku/Render), or 8080 if nothing is set.
 const PORT = process.env.PORT || 8080; 
 
 // ============================================
@@ -25,7 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // ============================================
 //   API Routes (Connects Web to Heroku Bot)
 // ============================================
-// This loads the api.js file we created earlier
+// This loads the api.js file
 try {
     require("./api")(app);
     console.log("✅ API Gateway routes loaded.");
@@ -34,7 +33,7 @@ try {
 }
 
 // ============================================
-//   Catch-All for SPA (Optional but good practice)
+//   Catch-All for SPA
 // ============================================
 // If someone visits a URL that doesn't exist, send them back to index.html
 app.get("*", (req, res) => {
